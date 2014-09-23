@@ -1,6 +1,9 @@
-var Backbone = require('backbone');
+'use strict';
 
-module.exports = Backbone.Model.extend({
+var Backbone = require('backbone');
+var _ = require('underscore');
+
+var Subtitle = Backbone.Model.extend({
     defaults: {
         'startTime': '',
         'endTime': '',
@@ -8,10 +11,12 @@ module.exports = Backbone.Model.extend({
     },
 
     validate: function(attrs) {
-        if (!this.get('startTime')) return 'You missed startTime';
-        if (!this.get('endTime')) return 'You missed endTime';
-        if (!this.get('text')) return 'You missed text';
-        if (this.get('startTime') > this.get('endTime')) return 'startTime cannot be greater than endTime';
+        if (_.isUndefined(attrs.startTime) || _.isUndefined(attrs.endTime) || _.isUndefined(attrs.text)) {
+            return 'You missed one of the attributes';
+        }
+        if (attrs.startTime > attrs.endTime) {
+            return 'startTime cannot be greater than endTime';
+        }
     },
 
     /**
@@ -21,10 +26,17 @@ module.exports = Backbone.Model.extend({
      * and zero if they are equals or overlaps or one time period contains another.
      */
     equals: function(that) {
-        if (!(that instanceof Subtitle)) throw Error('Cannot compare with element that does not belong to Subtitle type');
-        if (this.get('startTime') > that.get('endTime')) return 1;
-        else if (that.get('startTime') > this.get('endTime')) return -1;
-        else return 0;
+        if (!(that instanceof Subtitle)) {
+            throw Error('Cannot compare with element that does not belong to Subtitle type');
+        }
+
+        if (this.get('startTime') > that.get('endTime')) {
+            return 1;
+        } else if (that.get('startTime') > this.get('endTime')) {
+            return -1;
+        } else {
+            return 0;
+        }
     },
 
     /**
@@ -35,17 +47,20 @@ module.exports = Backbone.Model.extend({
      * and zero if the curect time period contain the {@code moment}.
      */
     containMoment: function(moment) {
-        if (!Number.isInteger) {
-            Number.isInteger = function isInteger (nVal) {
-                return typeof nVal === "number" && isFinite(nVal) && nVal > -9007199254740992 && nVal < 9007199254740992 && Math.floor(nVal) === nVal;
-            };
+        if (!(_.isNumber(moment) && _.isFinite(moment))) {
+            throw Error('Moment should be an Integer');
         }
 
-        if (!Number.isInteger(moment)) throw Error('Moment should be an Integer');
-
-        if (moment >= this.get('startTime') && moment <= this.get('endTime')) return 0;
-        else if (moment < this.get('startTime')) return -1;
-        else if (moment > this.get('endTime')) return +1;
-        else throw Error('Impossible case :-)');
+        if (moment >= this.get('startTime') && moment <= this.get('endTime')) {
+            return 0;
+        } else if (moment < this.get('startTime')) {
+            return -1;
+        } else if (moment > this.get('endTime')) {
+            return +1;
+        } else {
+            throw Error('Impossible case :-)');
+        }
     }
 });
+
+module.exports = Subtitle;
