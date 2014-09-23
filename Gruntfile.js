@@ -34,6 +34,14 @@ module.exports = function (grunt) {
       },
       files: '<%= config.app %>/js/**/*.js'
     },
+    mochaTest: {
+      test: {
+        options: {
+          reporter: 'spec'
+        },
+        src: ['test/**/*.js']
+      }
+    },
     copy: {
       appLinux: {
         files: [{

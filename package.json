@@ -1,10 +1,9 @@
 {
-  "name": "proj1",
-  "version": "0.0.0",
-  "description": "",
+  "name": "SBT-Player",
+  "description": "Yet another player",
   "keywords": [],
-  "homepage": "https://github.com/mikach/proj1",
-  "bugs": "https://github.com/mikach/proj1/issues",
+  "homepage": "https://github.com/mikach/SBT-Player",
+  "bugs": "https://github.com/mikach/SBT-Player/issues",
   "author": {
     "name": "Michael",
     "email": "",
@@ -12,23 +11,27 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/mikach/proj1.git"
+    "url": "git://github.com/mikach/SBT-Player.git"
   },
   "dependencies": {
     "backbone": "^1.1.2",
-    "jquery": "^2.1.1"
+    "jquery": "^2.1.1",
+    "subtitles-parser": "0.0.2"
   },
   "devDependencies": {
+    "chai": "^1.9.1",
+    "concat-files": "~0.1.0",
     "grunt": "~0.4.5",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-compress": "~0.9.1",
     "grunt-contrib-concat": "~0.4.0",
+    "grunt-contrib-copy": "~0.5.0",
     "grunt-contrib-jshint": "~0.10.0",
     "grunt-contrib-rename": "0.0.3",
-    "grunt-contrib-compress": "~0.9.1",
-    "grunt-contrib-clean": "~0.5.0",
-    "grunt-contrib-copy": "~0.5.0",
+    "grunt-mocha-test": "^0.12.0",
     "load-grunt-tasks": "~0.4.0",
-    "time-grunt": "~0.3.1",
-    "concat-files": "~0.1.0"
+    "mocha": "^1.21.4",
+    "time-grunt": "~0.3.1"
   },
   "engines": {
     "node": ">=0.8.0"

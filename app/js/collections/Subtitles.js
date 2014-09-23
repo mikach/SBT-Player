@@ -4,7 +4,7 @@ var Backbone = require('backbone');
 var parser = require('subtitles-parser');
 var fs = require('fs');
 
-var Subtitle = require('./js/models/subtitle');
+var Subtitle = require('../models/subtitle');
 
 var Subtitles = Backbone.Collection.extend({
     model: Subtitle,

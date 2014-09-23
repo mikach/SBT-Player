@@ -1,6 +1,7 @@
 {
     "predef": [
-        "window"
+        "window",
+        "_currentWindow_"
     ],
     "node": true,
     "esnext": true,

@@ -12,16 +12,20 @@ module.exports = Backbone.View.extend({
         'drop': 'drop',
         'click .control.play': 'play',
         'click .control.pause': 'pause',
-        'click .progress': 'setVideoPosition'
+        'click .progress-wrap': 'setVideoPosition'
     },
 
     initialize: function() {
         this.$player = this.$('video');
-        this.$progress = this.$('.control.progress');
+        this.$progress = this.$('.control .progress');
+
+        this.$btn = this.$('.control.play');
 
         this.video = this.$player[0];
 
         this.video.addEventListener('timeupdate', this.syncProgressBar.bind(this), false);
+        this.video.addEventListener('play', this.syncBtn.bind(this), false);
+        this.video.addEventListener('pause', this.syncBtn.bind(this), false);
     },
 
     dragover: function(e) {
@@ -44,27 +48,38 @@ module.exports = Backbone.View.extend({
 
         var reader = new FileReader();
         reader.onload = function (event) {
-            // console.log(event.target);
             var source = Backbone.$('<source src="' + event.target.result + '" ></source>');
             self.$player.append(source);
+            _currentWindow_.title = file.name;
             self.startPlayMode();
         };
         reader.readAsDataURL(file);
     },
 
-    play: function(e) {
+    play: function() {
         this.video.play();
-        Backbone.$(e.target).removeClass('play').addClass('pause');
     },
 
-    pause: function(e) {
+    pause: function() {
         this.video.pause();
-        Backbone.$(e.target).addClass('play').removeClass('pause');
     },
 
     startPlayMode: function() {
         this.$el.addClass('playmode');
         this.video.play();
+    },
+
+    // endPlayMode: function() {
+    //     this.$player.children().remove();
+    //     this.$el.removeClass('playmode');
+    // },
+
+    syncBtn: function() {
+        if (!this.video.paused) {
+            this.$btn.removeClass('play').addClass('pause');
+        } else {
+            this.$btn.addClass('play').removeClass('pause');
+        }
     },
 
     syncProgressBar: function() {
