@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>proj1</title>
+    <link rel="stylesheet" type="text/css" href="./css/styles.css">
+</head>
+<body>
+    <div id="main">
+        <label>Drop media here</label>
+
+        <video></video>
+
+        <div class="button play"></div>
+    </div>
+
+    <script>
+        window.ondragover = window.ondrop = function(e) { e.preventDefault(); return false; };
+    </script>
+    <script src="./js/index.js"></script>
+</body>
+</html>

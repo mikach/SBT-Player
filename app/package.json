@@ -1,0 +1,15 @@
+{
+    "name": "proj1",
+    "main": "index.html",
+    "version": "0.0.1",
+    "single-instance": true,
+    "window": {
+        "title": "proj1",
+        "width": 800,
+        "height": 600,
+        "min_width": 400,
+        "min_height": 300,
+        "toolbar": false
+    },
+    "chromium-args": "--child-clean-exit"
+}
