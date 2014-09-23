@@ -10,12 +10,17 @@ module.exports = Backbone.View.extend({
     events: {
         'dragover': 'dragover',
         'drop': 'drop',
-        'click .button.play': 'play',
-        'click .button.pause': 'pause'
+        'click .control.play': 'play',
+        'click .control.pause': 'pause'
     },
 
     initialize: function() {
-        this.player = this.$('video');
+        this.$player = this.$('video');
+        this.$progress = this.$('.control.progress');
+
+        this.video = this.$player[0];
+
+        this.video.addEventListener('timeupdate', this.syncProgressBar.bind(this), false);
     },
 
     dragover: function(e) {
@@ -40,23 +45,33 @@ module.exports = Backbone.View.extend({
         reader.onload = function (event) {
             // console.log(event.target);
             var source = Backbone.$('<source src="' + event.target.result + '" ></source>');
-            self.player.append(source);
+            self.$player.append(source);
             self.startPlayMode();
         };
         reader.readAsDataURL(file);
     },
 
     play: function(e) {
-        this.player[0].play();
+        this.video.play();
         Backbone.$(e.target).removeClass('play').addClass('pause');
     },
 
     pause: function(e) {
-        this.player[0].pause();
+        this.video.pause();
         Backbone.$(e.target).addClass('play').removeClass('pause');
     },
 
     startPlayMode: function() {
         this.$el.addClass('playmode');
+        this.video.play();
+    },
+
+    syncProgressBar: function() {
+        var currentTime = this.video.currentTime,
+            duration = this.video.duration;
+
+        var per = Math.floor(currentTime / duration * 100);
+
+        this.$progress.css('width', per + '%');
     }
 });
