@@ -1,1 +1,1 @@
-![status](https://secure.travis-ci.org/mikach/sbt-player.png?branch=master)
+![status](https://travis-ci.org/mikach/SBT-Player.svg?branch=master)
