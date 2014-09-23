@@ -11,7 +11,8 @@ module.exports = Backbone.View.extend({
         'dragover': 'dragover',
         'drop': 'drop',
         'click .control.play': 'play',
-        'click .control.pause': 'pause'
+        'click .control.pause': 'pause',
+        'click .progress': 'setVideoPosition'
     },
 
     initialize: function() {
@@ -73,5 +74,11 @@ module.exports = Backbone.View.extend({
         var per = Math.floor(currentTime / duration * 100);
 
         this.$progress.css('width', per + '%');
+    },
+
+    setVideoPosition: function(e) {
+        var per = e.pageX / Backbone.$(window.document).width();
+
+        this.video.currentTime = Math.floor(this.video.duration * per);
     }
 });
