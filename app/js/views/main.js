@@ -121,7 +121,7 @@ module.exports = Backbone.View.extend({
         if (this.subtitles) {
             // var sub = this.subtitles.get(5);
             sub = this.subtitles.getByMoment(currentTime);
-            html = sub ? sub.get('text') : '';
+            html = sub ? this.textToSubtitle(sub.get('text')) : '';
             this.$subtitles.html(html);
         }
     },
@@ -138,5 +138,11 @@ module.exports = Backbone.View.extend({
 
     prevVideoPosition: function() {
         this.video.currentTime -= 5;
+    },
+
+    textToSubtitle: function(text) {
+        return text.split(' ').map(function(word) {
+            return '<span>' + word + '</span>';
+        }).join('');
     }
 });

@@ -89,3 +89,13 @@ video {
     text-align: center;
     box-sizing: border-box;
 }
+#main .subtitles span {
+    padding: 2px;
+    cursor: default;
+}
+#main .subtitles span:hover {
+    background: rgb(247, 207, 50);
+    border-radius: 10px;
+    color: #000;
+}
+}

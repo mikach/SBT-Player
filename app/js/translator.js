@@ -1,7 +1,10 @@
 'use strict';
 
+/* jshint camelcase:false */
+
 var querystring = require('querystring');
 var XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
+/* global -Promise */
 var Promise = require('bluebird').Promise;
 var rp = require('request-promise');
 var _ = require('underscore');
@@ -75,7 +78,7 @@ var translator = (function() {
                 xmlhttp.setRequestHeader('Authorization', 'Bearer ' + JSON.parse(data).access_token);
                 xmlhttp.onload = function() {
                     if (xmlhttp.status === 200) {
-                        resolve(xmlhttp.responseText.replace(/\<([^>]+)\>/, '').replace(/\<\/([^>]+)\>/, ''));
+                        resolve(xmlhttp.responseText.replace(/<([^>]+)\>/, '').replace(/<\/([^>]+)\>/, ''));
                     }
                     else {
                         reject(Error(xmlhttp.statusText));
