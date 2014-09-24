@@ -25,7 +25,7 @@ var Subtitles = Backbone.Collection.extend({
         var currentElement;
 
         while (minIndex <= maxIndex) {
-            currentIndex = (minIndex + maxIndex) / 2 || 0;
+            currentIndex = Math.floor((minIndex + maxIndex) / 2) || 0;
             currentElement = array[currentIndex];
 
             if (currentElement.containMoment(moment) > 0) {

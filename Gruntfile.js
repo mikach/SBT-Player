@@ -230,21 +230,21 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('dist-linux', [
-    'jshint',
+    'check',
     'clean:dist',
     'copy:appLinux',
     'createLinuxApp:Linux64'
   ]);
 
   grunt.registerTask('dist-linux32', [
-    'jshint',
+    'check',
     'clean:dist',
     'copy:appLinux',
     'createLinuxApp:Linux32'
   ]);
 
   grunt.registerTask('dist-win', [
-    'jshint',
+    'check',
     'clean:dist',
     'copy:copyWinToTmp',
     'compress:appToTmp',
@@ -254,7 +254,7 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('dist-mac', [
-    'jshint',
+    'check',
     'clean:dist',
     'copy:webkit',
     'copy:appMacos',
@@ -263,7 +263,8 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('check', [
-    'jshint'
+    'jshint',
+    'mochaTest'
   ]);
 
   grunt.registerTask('dmg', 'Create dmg from previously created app folder in dist.', function () {

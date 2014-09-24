@@ -1,7 +1,7 @@
 'use strict';
 
 var Backbone = require('backbone');
-var _ = Backbone._;
+var _ = require('underscore');
 
 var Subtitle = Backbone.Model.extend({
     defaults: {

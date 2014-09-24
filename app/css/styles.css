@@ -79,3 +79,13 @@ video {
     height: 10px;
     box-shadow: none;
 }
+
+#main .subtitles {
+    font-size: 24px;
+    color: #fff;
+    bottom: 40px;
+    padding: 0px 80px;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+}

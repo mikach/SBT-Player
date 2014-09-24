@@ -4,6 +4,9 @@
   "keywords": [],
   "homepage": "https://github.com/mikach/SBT-Player",
   "bugs": "https://github.com/mikach/SBT-Player/issues",
+  "scripts": {
+    "test": "grunt mochaTest"
+  },
   "author": {
     "name": "Michael",
     "email": "",
@@ -17,7 +20,8 @@
     "backbone": "^1.1.2",
     "jquery": "^2.1.1",
     "keymaster": "^1.6.2",
-    "subtitles-parser": "0.0.2"
+    "subtitles-parser": "0.0.2",
+    "underscore": "^1.7.0"
   },
   "devDependencies": {
     "chai": "^1.9.1",
