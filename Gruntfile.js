@@ -230,21 +230,21 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('dist-linux', [
-    'check',
+    'jshint',
     'clean:dist',
     'copy:appLinux',
     'createLinuxApp:Linux64'
   ]);
 
   grunt.registerTask('dist-linux32', [
-    'check',
+    'jshint',
     'clean:dist',
     'copy:appLinux',
     'createLinuxApp:Linux32'
   ]);
 
   grunt.registerTask('dist-win', [
-    'check',
+    'jshint',
     'clean:dist',
     'copy:copyWinToTmp',
     'compress:appToTmp',
@@ -254,7 +254,7 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('dist-mac', [
-    'check',
+    'jshint',
     'clean:dist',
     'copy:webkit',
     'copy:appMacos',

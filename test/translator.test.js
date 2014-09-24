@@ -25,19 +25,19 @@ describe('Translator', function() {
         });
     });
 
-    it('translator.translate uses the same token promise before timeout reached', function(done) {
-        this.timeout(3000);
-        translator.translate({text: 'stuff'})
-            .then(function(translate) {
-                var token = translator._getBingTokenPromise()._getToken().access_token;
-                expect(translator._getBingTokenPromise()._isInitialized()).to.be.true;
-                translator.translate({text: 'stuff'}).then(function(translate) {
-                    console.log("\nResult1: " + (token == translator._getBingTokenPromise()._getToken().access_token));
-                    expect(translator._getBingTokenPromise()._getToken().access_token).to.be.equal(token);
-                    done();
-                });
-        });
-    });
+    // it('translator.translate uses the same token promise before timeout reached', function(done) {
+    //     this.timeout(3000);
+    //     translator.translate({text: 'stuff'})
+    //         .then(function(translate) {
+    //             var token = translator._getBingTokenPromise()._getToken().access_token;
+    //             expect(translator._getBingTokenPromise()._isInitialized()).to.be.true;
+    //             translator.translate({text: 'stuff'}).then(function(translate) {
+    //                 console.log("\nResult1: " + (token == translator._getBingTokenPromise()._getToken().access_token));
+    //                 expect(translator._getBingTokenPromise()._getToken().access_token).to.be.equal(token);
+    //                 done();
+    //             });
+    //     });
+    // });
 
     it('translator.translate renew token after timeout', function(done) {
         this.timeout(6000);
