@@ -6,11 +6,9 @@ var Promise = require('bluebird').Promise;
 var rp = require('request-promise');
 var _ = require('underscore');
 
-var bingTokenPromise = (function() {
+var bingTokenProm = (function() {
 
-    var token, timeout, timeReserve = 5, isInitialized = false, lastPromise, intervalId;
-
-    var requestOpts = {
+    var authOpts = {
         encoding: 'utf8',
         uri: 'https://datamarket.accesscontrol.windows.net/v2/OAuth2-13',
         method: 'POST',
@@ -22,48 +20,38 @@ var bingTokenPromise = (function() {
         })
     };
 
-    var renewToken = function() {
-        lastPromise = rp(requestOpts);
-        lastPromise.then(function(data) {
-            token = JSON.parse(data);
+    var intervalId, promise = rp(authOpts);
+
+    /**
+     * Make promise renew each {@code (timeout - timeReserve)} seconds
+     */
+    (function() {
+        var timeReserve = 5;
+        promise.then(function(data) {
+            var interval = 1000 * (JSON.parse(data).expires_in - timeReserve);
+            intervalId = setInterval(function() {
+                promise = rp(authOpts);
+            }, interval);
         });
-    };
+    })();
 
     return {
         get: function() {
-            if (!lastPromise) {
-                lastPromise = rp(requestOpts);
-            }
-            return lastPromise;
+            return promise;
         },
 
-        /*
-         * For test purposes
-         */
-        _getToken: function() {
-            return token;
-        },
-
-        _mockRenewalPeriod: function(mockInterval) {
+        _mockRenewalPeriod: function(newInterval) {
             clearInterval(intervalId);
-            intervalId = setInterval(renewToken, mockInterval);
-        },
-
-        _isInitialized: function() {
-            return isInitialized;
-        },
-
-        _init: function(token) {
-            isInitialized = true;
-            timeout = token.expires_in;
-            intervalId = setInterval(renewToken, timeout - timeReserve);
+            intervalId = setInterval(function() {
+                promise = rp(authOpts);
+            }, newInterval);
         }
     };
 })();
 
 var translator = (function() {
 
-    var getTranslatePromise = function (opts) {
+    var getTranslateProm = function (opts) {
 
         var checkAndSetDefaults = function (opts) {
             if (!opts || _.isUndefined(opts.text)) {
@@ -78,19 +66,13 @@ var translator = (function() {
             return opts;
         };
 
-        return bingTokenPromise.get().then(function(data) {
-            if (!bingTokenPromise._isInitialized()) {
-                bingTokenPromise._init(JSON.parse(data));
-            }
-
-            var token = JSON.parse(data);
+        return bingTokenProm.get().then(function(data) {
             var urlOpts = checkAndSetDefaults(opts);
 
             return new Promise(function(resolve, reject) {
                 var xmlhttp = new XMLHttpRequest();
                 xmlhttp.open('GET', 'http://api.microsofttranslator.com/v2/Http.svc/Translate?from=' + urlOpts.from + '&to=' + urlOpts.to + '&text=' + urlOpts.text, true);
-                xmlhttp.setRequestHeader('Authorization', 'Bearer ' + token.access_token);
-
+                xmlhttp.setRequestHeader('Authorization', 'Bearer ' + JSON.parse(data).access_token);
                 xmlhttp.onload = function() {
                     if (xmlhttp.status === 200) {
                         resolve(xmlhttp.responseText.replace(/\<([^>]+)\>/, '').replace(/\<\/([^>]+)\>/, ''));
@@ -105,12 +87,15 @@ var translator = (function() {
                 xmlhttp.send();
             });
         });
-    }
+    };
 
     return {
-        translate: getTranslatePromise,
-        _getBingTokenPromise: function() {
-            return bingTokenPromise;
+        translate: getTranslateProm,
+        _getTokenProm: function() {
+            return bingTokenProm.get();
+        },
+        _mockRenewalPeriod: function(newInterval) {
+            bingTokenProm._mockRenewalPeriod(newInterval);
         }
     };
 })();
