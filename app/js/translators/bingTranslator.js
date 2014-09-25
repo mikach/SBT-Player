@@ -7,7 +7,6 @@ var XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 /* global -Promise */
 var Promise = require('bluebird').Promise;
 var rp = require('request-promise');
-var _ = require('underscore');
 
 var bingTokenProm = (function() {
 
@@ -52,29 +51,15 @@ var bingTokenProm = (function() {
     };
 })();
 
-var translator = (function() {
+var bingTranslator = (function() {
 
     var getTranslateProm = function (opts) {
 
-        var checkAndSetDefaults = function (opts) {
-            if (!opts || _.isUndefined(opts.text)) {
-                throw Error('You did not specified text to translate');
-            }
-            if (_.isUndefined(opts.from)) {
-                opts.from = 'en';
-            }
-            if (_.isUndefined(opts.to)) {
-                opts.to = 'ru';
-            }
-            return opts;
-        };
-
         return bingTokenProm.get().then(function(data) {
-            var urlOpts = checkAndSetDefaults(opts);
 
             return new Promise(function(resolve, reject) {
                 var xmlhttp = new XMLHttpRequest();
-                xmlhttp.open('GET', 'http://api.microsofttranslator.com/v2/Http.svc/Translate?from=' + urlOpts.from + '&to=' + urlOpts.to + '&text=' + urlOpts.text, true);
+                xmlhttp.open('GET', 'http://api.microsofttranslator.com/v2/Http.svc/Translate?from=' + opts.from + '&to=' + opts.to + '&text=' + opts.text, true);
                 xmlhttp.setRequestHeader('Authorization', 'Bearer ' + JSON.parse(data).access_token);
                 xmlhttp.onload = function() {
                     if (xmlhttp.status === 200) {
@@ -103,4 +88,4 @@ var translator = (function() {
     };
 })();
 
-module.exports = translator;
+module.exports = bingTranslator;

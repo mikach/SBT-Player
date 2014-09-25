@@ -20,26 +20,6 @@ var Subtitle = Backbone.Model.extend({
     },
 
     /**
-     * Compare two time periods
-     * @param that Subtitle with which we compare the current one
-     * @returns {number} positive if {@code this} is greater than {@code that}, negative if {@code this} is less than {@code that}
-     * and zero if they are equals or overlaps or one time period contains another.
-     */
-    equals: function(that) {
-        if (!(that instanceof Subtitle)) {
-            throw Error('Cannot compare with element that does not belong to Subtitle type');
-        }
-
-        if (this.get('startTime') > that.get('endTime')) {
-            return 1;
-        } else if (that.get('startTime') > this.get('endTime')) {
-            return -1;
-        } else {
-            return 0;
-        }
-    },
-
-    /**
      *
      * @param moment moment for which we need to find a time period
      * @returns {number} positive if {@code moment} belongs to time period greater than {@code this},
@@ -48,7 +28,7 @@ var Subtitle = Backbone.Model.extend({
      */
     containMoment: function(moment) {
         if (!(_.isNumber(moment) && _.isFinite(moment))) {
-            throw Error('Moment should be an Integer');
+            throw new Error('Moment should be an Integer');
         }
 
         if (moment >= this.get('startTime') && moment <= this.get('endTime')) {
