@@ -3,20 +3,35 @@
 var Backbone = require('backbone');
 var parser = require('subtitles-parser');
 var fs = require('fs');
-var appRoot = require('app-root-path');
+var _ = require('underscore');
 
 var Subtitle = require('../models/subtitle');
 
 var Subtitles = Backbone.Collection.extend({
     model: Subtitle,
     index: 0,
+    shift: 0,
 
     next: function() {
         return (this.index < this.length) ? this.at(this.index++) : null;
     },
 
     getByMoment: function(moment) {
-        return this._binarySearch(this.toArray(), moment);
+        return this._binarySearch(this.toArray(), this._getMomentWithShift(moment));
+    },
+
+    setShift: function(shift) {
+        if(_.isNumber(shift) && _.isFinite(shift)) {
+            this.shift = shift;
+        }
+    },
+
+    _getMomentWithShift: function(moment) {
+        var res = moment + this.shift,
+            startMoment = 0,
+            endMoment = this.at(this.length - 1).get('endTime');
+
+        return (res < 0) ? startMoment : (res > endMoment) ? endMoment : res;
     },
 
     _binarySearch: function(array, moment) {
@@ -47,8 +62,8 @@ var Subtitles = Backbone.Collection.extend({
      * @relativePath path to *.srt file relatively project root
      * Returns {@code Subtitles} collection from the *.srt file
      */
-    fromFile: function(relativePath) {
-        var srt = fs.readFileSync(appRoot + '/' + relativePath).toString('utf8');
+    fromFile: function(path) {
+        var srt = fs.readFileSync(path).toString('utf8');
         var data = parser.fromSrt(srt, true);
         var subtitles = new Subtitles();
         subtitles.add(data);

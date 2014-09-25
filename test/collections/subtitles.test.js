@@ -44,12 +44,20 @@ describe('Subtitles Collection', function() {
         expect(subtitles.next().get('text')).to.be.equal('Fifth');
         expect(subtitles.getByMoment(0).get('text')).to.be.equal('First');
         expect(subtitles.next().get('text')).to.be.equal('Second');
-        expect(subtitles.getByMoment(99999)).to.be.null;
-        expect(subtitles.next().get('text')).to.be.equal('Third');
+    });
+
+    it('Test shift', function() {
+        var subtitles = new Subtitles(subtitlesArray);
+        subtitles.setShift(-2000);
+        expect(subtitles.getByMoment(4000).get('text')).to.be.equal('Second');
+        subtitles.setShift(-10000);
+        expect(subtitles.getByMoment(4000).get('text')).to.be.equal('First');
+        subtitles.setShift(+10000);
+        expect(subtitles.getByMoment(4000).get('text')).to.be.equal('Fifth');
     });
 
     it('Test creating from file', function() {
-        var subtitles = Subtitles.fromFile('test/resources/Subtitles_sample.srt');
+        var subtitles = Subtitles.fromFile(__dirname + '/../resources/Subtitles_sample.srt');
         expect(subtitles.getByMoment(12000).get('text')).to.be.equal('Oh, God!' + "\n" + 'Is he just the sweetest thing?');
         expect(subtitles.next().get('endTime')).to.be.equal(17946);
         expect(subtitles.length).to.be.equal(336);
