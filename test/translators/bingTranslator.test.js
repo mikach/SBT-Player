@@ -1,19 +1,11 @@
 var expect = require('chai').expect;
-var translator = require('../app/js/translator.js');
+var translator = require('../../app/js/translators/bingTranslator.js');
 
 describe('Translator', function() {
 
     it('translator.translate should be instance of Promise', function() {
         expect(translator.translate).to.be.instanceOf(Function);
-        expect(translator.translate({text: 'stuff'}).then).to.be.instanceOf(Function);
-    });
-
-    it('translator.translate works correctly with defaults', function(done) {
-        this.timeout(3000);
-        translator.translate({text: 'stuff'}).then(function(translate) {
-            expect(translate).to.be.equal('вещи');
-            done();
-        });
+        expect(translator.translate({text: 'stuff', from: 'en', to: 'ru'}).then).to.be.instanceOf(Function);
     });
 
     it('translator.translate works correctly with languages passed as arguments', function(done) {
